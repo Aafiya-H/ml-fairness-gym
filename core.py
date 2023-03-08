@@ -445,7 +445,10 @@ class FairnessEnv(gym.Env):
   def _update_history(self, state, action):
     """Adds state and action to the environment's history."""
     self.history.append(HistoryItem(state=copy.deepcopy(state), action=action))
+<<<<<<< HEAD
     
+=======
+>>>>>>> 38eaf4514062892e0c3ce5d7cff4b4c1a7e49242
 
   def _set_history(self, history):
     self.history = history

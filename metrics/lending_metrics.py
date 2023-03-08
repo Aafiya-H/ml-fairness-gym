@@ -24,6 +24,7 @@ from environments import lending
 import utils
 import numpy as np
 
+import numpy as np
 from typing import Dict, Text
 
 
@@ -61,11 +62,12 @@ class CumulativeLoans(core.Metric):
     history = self._extract_history(env)
     result = []
     for index,history_item in enumerate(history):
-      state = history_item.state  # type: lending.State  # pytype: disable=annotation-type-mismatch
-      # Take advantage of the one-hot encoding of state.group in order to build
-      # a (num_steps) x (num_groups) array with 1s where loans were given.
-      # Multiplying by action makes a row of all zeros if the loan was rejected.
-      result.append(np.array(state.group) * history_item.action)
+      for history_item in history:
+        state = history_item.state  # type: lending.State  # pytype: disable=annotation-type-mismatch
+        # Take advantage of the one-hot encoding of state.group in order to build
+        # a (num_steps) x (num_groups) array with 1s where loans were given.
+        # Multiplying by action makes a row of all zeros if the loan was rejected.
+        result.append(np.array(state.group) * history_item.action)
     return np.cumsum(result, 0).T
 
 
@@ -91,6 +93,7 @@ class CumulativeRecall(core.Metric):
           (1 - state.will_default))
       denominator.append(np.array(state.group) * (1 - state.will_default))
     return (np.cumsum(numerator, 0) / np.cumsum(denominator, 0)).T
+
   
 class AcceptanceRate(core.Metric):
   def measure(self,env):

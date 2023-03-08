@@ -28,7 +28,11 @@ import file_util
 from environments import lending_params
 import matplotlib as mpl
 # pylint: disable=g-import-not-at-top
+<<<<<<< HEAD
 mpl.use('TkAgg')
+=======
+mpl.use('Agg')
+>>>>>>> 38eaf4514062892e0c3ce5d7cff4b4c1a7e49242
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.linalg as linalg

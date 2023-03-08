@@ -25,12 +25,18 @@ from absl import flags
 from agents import threshold_policies
 from experiments import lending
 from experiments import lending_plots
+<<<<<<< HEAD
 # import matplotlib
 # matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
 import simplejson as json
 import pickle
+=======
+import matplotlib.pyplot as plt
+import numpy as np
+import simplejson as json
+>>>>>>> 38eaf4514062892e0c3ce5d7cff4b4c1a7e49242
 
 flags.DEFINE_string('outfile', None, 'Path to write out results.')
 flags.DEFINE_string('plots_directory', None, 'Directory to write out plots.')
@@ -127,12 +133,18 @@ def main(argv):
   print('Profit %s %f' % (title, result['metric_results']['profit rate']))
   plt.show()
 
+<<<<<<< HEAD
 #   with open('../Max-util/400steps', 'wb') as f:
 #     pickle.dump(result, f)
 
   if FLAGS.outfile:
     with open(FLAGS.outfile, 'w') as f:
       pass
+=======
+  if FLAGS.outfile:
+    with open(FLAGS.outfile, 'w') as f:
+      f.write(result)
+>>>>>>> 38eaf4514062892e0c3ce5d7cff4b4c1a7e49242
 
 
 if __name__ == '__main__':

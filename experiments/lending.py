@@ -130,6 +130,7 @@ class Experiment(core.Params):
                 stratify_fn=lambda x: str(x.state.group_id)),
         'profit rate':
             value_tracking_metrics.ValueChange(env, state_var='bank_cash'),
+
         'acceptance rate':
             lending_metrics.AcceptanceRate(env),
         'defaulter rate': 
