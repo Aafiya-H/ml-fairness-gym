@@ -25,14 +25,6 @@ from absl import flags
 from agents import threshold_policies
 from experiments import lending
 from experiments import lending_plots
-<<<<<<< HEAD
-# import matplotlib
-# matplotlib.use('TkAgg')
-import matplotlib.pyplot as plt
-import numpy as np
-import simplejson as json
-import pickle
-=======
 import matplotlib.pyplot as plt
 import numpy as np
 import simplejson as json
