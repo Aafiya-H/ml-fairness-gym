@@ -126,9 +126,6 @@ class AcceptanceRate(core.Metric):
             loan_distriubtion[1]["approved"]/loan_distriubtion[1]["total"]
           )
         )
-
-    # return acceptance_rates
-    # save acceptance rates
     # utils.pickle_data(acceptance_rates,outfile_path="./Max-util/10steps.pickle")
     # print("Acceptance rates saved")
 
@@ -184,8 +181,6 @@ class DefaulterRate(core.Metric):
           defaulted_loans[0]/total_loans[0],
           defaulted_loans[1]/total_loans[1]
         ))
-    # return defaulter_rates
-    # save defaulter rates
     # utils.pickle_data(defaulter_rates,outfile_path="./Max-util/10steps.pickle")
-    print("Defaulter rates saved")
+    # print("Defaulter rates saved")
 

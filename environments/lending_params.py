@@ -26,10 +26,6 @@ import attr
 import core
 import distributions
 import numpy as np
-<<<<<<< HEAD
-import pickle
-=======
->>>>>>> 38eaf4514062892e0c3ce5d7cff4b4c1a7e49242
 from typing import Callable, Sequence
 
 
@@ -198,22 +194,17 @@ def _credit_cluster_builder(group_membership,
   return _credit_clusters
 
 
-<<<<<<< HEAD
+
 # Likelihoods of credit score given group_id. 
 # P(credit_score|group_id)
-=======
-# Likelihoods of credit score given group_id.
->>>>>>> 38eaf4514062892e0c3ce5d7cff4b4c1a7e49242
+
 DELAYED_IMPACT_CLUSTER_PROBS = (
     (0.0, 0.1, 0.1, 0.2, 0.3, 0.3, 0.0),
     (0.1, 0.1, 0.2, 0.3, 0.3, 0.0, 0.0),
 )
-<<<<<<< HEAD
+
 # Likelihoods of loan repayment given credit score. 
 # P(paying_back|credit_score)
-=======
-# Likelihoods of loan repayment given credit score.
->>>>>>> 38eaf4514062892e0c3ce5d7cff4b4c1a7e49242
 DELAYED_IMPACT_SUCCESS_PROBS = (0.1, 0.2, 0.45, 0.6, 0.65, 0.7, 0.7)
 
 
