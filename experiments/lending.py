@@ -69,6 +69,7 @@ class Experiment(core.Params):
   num_steps = attr.ib(default=10000)  # Number of steps in the experiment.
   return_json = attr.ib(default=True)  # Return the results as a json string.
   include_cumulative_loans = attr.ib(default=False)
+  
 
   def scenario_builder(self):
     """Returns an agent and environment pair."""

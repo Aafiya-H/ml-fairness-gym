@@ -102,51 +102,40 @@ class AcceptanceRate(core.Metric):
     acceptance_rates = []
     for history_item in history:
       state = history_item.state
+
       if history_item.action == 1:
         loan_distriubtion[state.group_id]["approved"] += 1
       loan_distriubtion[state.group_id]["total"] += 1
+
       if loan_distriubtion[0]["total"] == 0:
-        acceptance_rates.append(
-          ( 
-            0,
-            loan_distriubtion[1]["approved"]/loan_distriubtion[1]["total"]
-          )
-        )
+        acceptance_rates.append(( 0,loan_distriubtion[1]["approved"]/loan_distriubtion[1]["total"]))
+
       elif loan_distriubtion[1]["total"] == 0:
-        acceptance_rates.append(
-          ( 
-            loan_distriubtion[0]["approved"]/loan_distriubtion[0]["total"],
-            0
-          )
-        )
+        acceptance_rates.append(( loan_distriubtion[0]["approved"]/loan_distriubtion[0]["total"],0))
+
       else:
-        acceptance_rates.append(
-          ( 
-            loan_distriubtion[0]["approved"]/loan_distriubtion[0]["total"],
-            loan_distriubtion[1]["approved"]/loan_distriubtion[1]["total"]
-          )
-        )
-    # utils.pickle_data(acceptance_rates,outfile_path="./Max-util/10steps.pickle")
-    # print("Acceptance rates saved")
+        acceptance_rates.append(( loan_distriubtion[0]["approved"]/loan_distriubtion[0]["total"],loan_distriubtion[1]["approved"]/loan_distriubtion[1]["total"]))
+    
+    return acceptance_rates
+
 
 
 class AverageCreditScore(core.Metric):
   def measure(self,env):
     average_credit_score = []
-    average_credit_score_at_t = {}
+    average_credit_score_at_t = []
     history = self._extract_history(env)
     for history_item in history:
       state = history_item.state
+
       for group_id in [0,1]:
         cluster_probability = state.params.applicant_distribution.components[group_id].weights
-        average_credit_score_at_t[group_id] = sum([index * value for index, value in enumerate(cluster_probability)])
-      # print(state.params.applicant_distribution.components[0].weights)
-      # print(state.params.applicant_distribution.components[1].weights)
-      # print(average_credit_score_at_t)
-      # print("-"*30)
+        average_credit_score_at_t.append(sum([index * value for index, value in enumerate(cluster_probability)]))
+
       average_credit_score.append(average_credit_score_at_t)
-    # utils.pickle_data(average_credit_score, outfile_path="./Max-util/10steps.pickle")
-    # print("Average credit score saved")
+
+    return average_credit_score
+
 
 class DefaulterRate(core.Metric):
   def measure(self,env):
@@ -163,24 +152,10 @@ class DefaulterRate(core.Metric):
       total_loans[state.group_id] += 1
 
       if total_loans[0] == 0:
-        defaulter_rates.append(
-          ( 
-            0,
-            defaulted_loans[1]/total_loans[1]
-          )
-        )
+        defaulter_rates.append(( 0,defaulted_loans[1]/total_loans[1]))
       elif total_loans[1]== 0:
-        defaulter_rates.append(
-          ( 
-            defaulted_loans[0]/total_loans[0],
-            0
-          )
-        )
+        defaulter_rates.append(( defaulted_loans[0]/total_loans[0],0))
       else:
-        defaulter_rates.append((
-          defaulted_loans[0]/total_loans[0],
-          defaulted_loans[1]/total_loans[1]
-        ))
-    # utils.pickle_data(defaulter_rates,outfile_path="./Max-util/10steps.pickle")
-    # print("Defaulter rates saved")
+        defaulter_rates.append((defaulted_loans[0]/total_loans[0],defaulted_loans[1]/total_loans[1]))
+    return defaulter_rates
 

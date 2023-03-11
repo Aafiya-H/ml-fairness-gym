@@ -28,6 +28,7 @@ from experiments import lending_plots
 import matplotlib.pyplot as plt
 import numpy as np
 import simplejson as json
+import pandas as pd
 
 flags.DEFINE_string('outfile', None, 'Path to write out results.')
 flags.DEFINE_string('plots_directory', None, 'Directory to write out plots.')
@@ -63,6 +64,7 @@ def main(argv):
       return_json=False,
       threshold_policy=(EQUALIZE_OPPORTUNITY if FLAGS.equalize_opportunity else
                         MAXIMIZE_REWARD)).run()
+
 
   title = ('Eq. opportunity' if FLAGS.equalize_opportunity else 'Max reward')
   metrics = result['metric_results']
@@ -125,8 +127,24 @@ def main(argv):
   plt.show()
 
   if FLAGS.outfile:
-    with open(FLAGS.outfile, 'w') as f:
-      f.write(result)
+    required_metrics = {
+    "acceptance rate":metrics["acceptance rate"],
+    "defaulter rate":metrics["defaulter rate"],
+    "average credit score":metrics["average credit score"]
+    }
+
+    required_metrics_reformatted = {
+    "acceptance rate-group 1":[],"acceptance rate-group 2":[],
+    "defaulter rate-group 1":[],"defaulter rate-group 2":[],
+    "average credit score-group 1":[],"average credit score-group 2":[],        
+    }
+    for metric in required_metrics:
+      for timestep in required_metrics[metric]:
+        required_metrics_reformatted[metric+"-group 1"] .append(timestep[0])
+        required_metrics_reformatted[metric+"-group 2"].append(timestep[1])
+      
+    df=pd.DataFrame.from_dict(required_metrics_reformatted,orient='columns')
+    df.to_csv(FLAGS.outfile)
 
 
 if __name__ == '__main__':
