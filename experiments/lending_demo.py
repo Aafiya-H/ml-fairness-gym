@@ -144,6 +144,8 @@ def main(argv):
         required_metrics_reformatted[metric+"-group 2"].append(timestep[1])
       
     df=pd.DataFrame.from_dict(required_metrics_reformatted,orient='columns')
+    df.index += 1
+    df.index.name = "Timestep"
     df.to_csv(FLAGS.outfile)
 
 
