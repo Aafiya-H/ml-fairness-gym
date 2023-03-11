@@ -25,6 +25,7 @@ import core
 import params
 import rewards
 import run_util
+import numpy as np
 from agents import classifier_agents
 from agents import oracle_lending_agent
 from agents import threshold_policies
@@ -69,7 +70,7 @@ class Experiment(core.Params):
   num_steps = attr.ib(default=10000)  # Number of steps in the experiment.
   return_json = attr.ib(default=True)  # Return the results as a json string.
   include_cumulative_loans = attr.ib(default=False)
-  
+
 
   def scenario_builder(self):
     """Returns an agent and environment pair."""
@@ -160,7 +161,7 @@ class Experiment(core.Params):
             'tpr_targets': agent.target_recall_history,
         },
         'experiment_params': self,
-        'metric_results': metric_results,
+        'metric_results': metric_results
     }
     if self.return_json:
       return core.to_json(report, indent=4)

@@ -127,23 +127,37 @@ def main(argv):
   plt.show()
 
   if FLAGS.outfile:
+    applicant_credit_group,applicant_group_membership,action = [],[],[]
+    history = result["environment"]["history"]
+    for history_item in history:
+      print("here")
+      state = history_item.state
+      applicant_credit_group.append(np.argmax(state.applicant_features))
+      applicant_group_membership.append(state.group_id)
+      action.append(history_item.action)
+
     required_metrics = {
     "acceptance rate":metrics["acceptance rate"],
     "defaulter rate":metrics["defaulter rate"],
     "average credit score":metrics["average credit score"]
     }
 
-    required_metrics_reformatted = {
+    required_features_reformatted = {
     "acceptance rate-group 1":[],"acceptance rate-group 2":[],
     "defaulter rate-group 1":[],"defaulter rate-group 2":[],
-    "average credit score-group 1":[],"average credit score-group 2":[],        
+    "average credit score-group 1":[],"average credit score-group 2":[],   
     }
+    
     for metric in required_metrics:
       for timestep in required_metrics[metric]:
-        required_metrics_reformatted[metric+"-group 1"] .append(timestep[0])
-        required_metrics_reformatted[metric+"-group 2"].append(timestep[1])
-      
-    df=pd.DataFrame.from_dict(required_metrics_reformatted,orient='columns')
+        required_features_reformatted[metric+"-group 1"] .append(timestep[0])
+        required_features_reformatted[metric+"-group 2"].append(timestep[1])
+
+    required_features_reformatted["applicant_group_membership"] = applicant_group_membership
+    required_features_reformatted["applicant_credit_group"] = applicant_credit_group
+    required_features_reformatted["action"] = action
+
+    df=pd.DataFrame.from_dict(required_features_reformatted,orient='columns')
     df.index += 1
     df.index.name = "Timestep"
     df.to_csv(FLAGS.outfile)
