@@ -70,61 +70,61 @@ def main(argv):
   metrics = result['metric_results']
 
   # Standalone figure of initial credit distribution
-  fig = plt.figure(figsize=(4, 4))
-  lending_plots.plot_credit_distribution(
-      metrics['initial_credit_distribution'],
-      'Initial',
-      path=os.path.join(FLAGS.plots_directory,
-                        'initial_credit_distribution.png')
-      if FLAGS.plots_directory else None,
-      include_median=True,
-      figure=fig)
-
-  # Initial and final credit distributions next to each other.
-  fig = plt.figure(figsize=(8, 4))
-  plt.subplot(1, 2, 1)
-  lending_plots.plot_credit_distribution(
-      metrics['initial_credit_distribution'],
-      'Initial',
-      path=None,
-      include_median=True,
-      figure=fig)
-  plt.subplot(1, 2, 2)
-
-  lending_plots.plot_credit_distribution(
-      metrics['final_credit_distributions'],
-      'Final - %s' % title,
-      path=os.path.join(FLAGS.plots_directory, 'final_credit_distribution.png')
-      if FLAGS.plots_directory else None,
-      include_median=True,
-      figure=fig)
-
-  fig = plt.figure()
-  lending_plots.plot_bars(
-      metrics['recall'],
-      title='Recall - %s' % title,
-      path=os.path.join(FLAGS.plots_directory, 'recall.png')
-      if FLAGS.plots_directory else None,
-      figure=fig)
-
-  fig = plt.figure()
-  lending_plots.plot_bars(
-      metrics['precision'],
-      title='Precision - %s' % title,
-      ylabel='Precision',
-      path=os.path.join(FLAGS.plots_directory, 'precision.png')
-      if FLAGS.plots_directory else None,
-      figure=fig)
-
-  fig = plt.figure()
-  lending_plots.plot_cumulative_loans(
-      {'demo - %s' % title: metrics['cumulative_loans']},
-      path=os.path.join(FLAGS.plots_directory, 'cumulative_loans.png')
-      if FLAGS.plots_directory else None,
-      figure=fig)
-
-  print('Profit %s %f' % (title, result['metric_results']['profit rate']))
-  plt.show()
+  # fig = plt.figure(figsize=(4, 4))
+  # lending_plots.plot_credit_distribution(
+  #     metrics['initial_credit_distribution'],
+  #     'Initial',
+  #     path=os.path.join(FLAGS.plots_directory,
+  #                       'initial_credit_distribution.png')
+  #     if FLAGS.plots_directory else None,
+  #     include_median=True,
+  #     figure=fig)
+  #
+  # # Initial and final credit distributions next to each other.
+  # fig = plt.figure(figsize=(8, 4))
+  # plt.subplot(1, 2, 1)
+  # lending_plots.plot_credit_distribution(
+  #     metrics['initial_credit_distribution'],
+  #     'Initial',
+  #     path=None,
+  #     include_median=True,
+  #     figure=fig)
+  # plt.subplot(1, 2, 2)
+  #
+  # lending_plots.plot_credit_distribution(
+  #     metrics['final_credit_distributions'],
+  #     'Final - %s' % title,
+  #     path=os.path.join(FLAGS.plots_directory, 'final_credit_distribution.png')
+  #     if FLAGS.plots_directory else None,
+  #     include_median=True,
+  #     figure=fig)
+  #
+  # fig = plt.figure()
+  # lending_plots.plot_bars(
+  #     metrics['recall'],
+  #     title='Recall - %s' % title,
+  #     path=os.path.join(FLAGS.plots_directory, 'recall.png')
+  #     if FLAGS.plots_directory else None,
+  #     figure=fig)
+  #
+  # fig = plt.figure()
+  # lending_plots.plot_bars(
+  #     metrics['precision'],
+  #     title='Precision - %s' % title,
+  #     ylabel='Precision',
+  #     path=os.path.join(FLAGS.plots_directory, 'precision.png')
+  #     if FLAGS.plots_directory else None,
+  #     figure=fig)
+  #
+  # fig = plt.figure()
+  # lending_plots.plot_cumulative_loans(
+  #     {'demo - %s' % title: metrics['cumulative_loans']},
+  #     path=os.path.join(FLAGS.plots_directory, 'cumulative_loans.png')
+  #     if FLAGS.plots_directory else None,
+  #     figure=fig)
+  #
+  # print('Profit %s %f' % (title, result['metric_results']['profit rate']))
+  # plt.show()
 
   if FLAGS.outfile:
     applicant_credit_group,applicant_group_membership,action = [],[],[]

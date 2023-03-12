@@ -36,6 +36,8 @@ class OracleThresholdAgent(classifier_agents.ThresholdAgent):
   def _record_training_example(self, observation, action, reward):
     self._training_corpus = classifier_agents.TrainingCorpus()
     applicant_distribution = self.env.state.params.applicant_distribution
+
+    ## change here
     for component in applicant_distribution.components:
       for cluster, weight in zip(component.components, component.weights):
         prob_default = cluster.will_default.p

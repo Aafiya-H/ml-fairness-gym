@@ -71,6 +71,15 @@ class _ApplicantSampler(core.StateUpdater):
   """Samples a new applicant."""
 
   def update(self, state, action):
+    if state.group_id is not None:
+      state.total_loans_requested[state.group_id] += 1
+      state.total_loans_accepted[state.group_id] += action
+      state.acceptance_rates[state.group_id] = state.total_loans_accepted[state.group_id]/state.total_loans_requested[state.group_id]
+    # change here --> remove 2 lines below
+    print(state.group_id)
+    print("Total loans requested: ",state.total_loans_requested)
+    print("-"*20)
+
     del action  # Unused.
     params = state.params
     new_applicant = params.applicant_distribution.sample(state.rng)
@@ -80,6 +89,7 @@ class _ApplicantSampler(core.StateUpdater):
     state.group = new_applicant.group
     state.group_id = np.argmax(new_applicant.group)
     state.will_default = new_applicant.will_default
+
 
 
 @attr.s(cmp=False)  # Use core.State's equality methods.
@@ -102,6 +112,10 @@ class State(core.State):
   group = attr.ib(default=None)  # type: Optional[List[int]]
   group_id = attr.ib(default=None)  # type: Optional[int]
   will_default = attr.ib(default=None)  # type: Optional[bool]
+
+  acceptance_rates = attr.ib(default=[None,None])
+  total_loans_requested = attr.ib(default=[0,0])
+  total_loans_accepted = attr.ib(default=[0,0])
 
 
 class BaseLendingEnv(core.FairnessEnv):

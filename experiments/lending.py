@@ -85,7 +85,7 @@ class Experiment(core.Params):
     env = lending.DelayedImpactEnv(env_params)
 
     agent_params = classifier_agents.ScoringAgentParams(
-        feature_keys=['applicant_features'],
+        feature_keys=['applicant_features'], # , added 'acceptance_rates' but got an error
         group_key='group',
         default_action_fn=(lambda: 1),
         burnin=self.burnin,

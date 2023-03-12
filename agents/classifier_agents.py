@@ -170,6 +170,8 @@ class ScoringAgent(core.Agent):
       factory=lambda: collections.defaultdict(list))
   target_recall_history = attr.ib(
       factory=lambda: collections.defaultdict(list))
+  group_specific_acceptance_rate_history = attr.ib(
+      factory=lambda: collections.defaultdict(list))
 
   _step = attr.ib(default=0)
   _last_action = attr.ib(default=None)
@@ -185,6 +187,12 @@ class ScoringAgent(core.Agent):
     for group, thresh in self.group_specific_thresholds.items():
       self.group_specific_threshold_history[group].append(thresh)
       self.target_recall_history[group].append(thresh.tpr_target)
+
+    # change here --> remove print statement
+    # print("Feature keys : ",self.params.feature_keys)
+    # print("Group specific threshold history : ",self.group_specific_threshold_history)
+    # print("Target recall history : ",self.target_recall_history)
+    # print("-"*20)
 
     self._record_training_example(self._last_observation, self._last_action,
                                   reward)
@@ -302,6 +310,8 @@ class ThresholdAgent(ScoringAgent):
           "Threshold agent can only have a single feature key. Got %s" %
           self.params.feature_keys)
     feature = observation.get(self.params.feature_keys[0])
+    # feature = observation.get(self.params.feature_keys)  ##change here -->
+
     if self.params.convert_one_hot_to_integer:
       return [np.argmax(feature)]
     return [feature]
