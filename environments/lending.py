@@ -76,9 +76,9 @@ class _ApplicantSampler(core.StateUpdater):
       state.total_loans_accepted[state.group_id] += action
       state.acceptance_rates[state.group_id] = state.total_loans_accepted[state.group_id]/state.total_loans_requested[state.group_id]
     # change here --> remove 2 lines below
-    print(state.group_id)
-    print("Total loans requested: ",state.total_loans_requested)
-    print("-"*20)
+    # print(state.group_id)
+    # print("Total loans requested: ",state.total_loans_requested)
+    # print("-"*20)
 
     del action  # Unused.
     params = state.params

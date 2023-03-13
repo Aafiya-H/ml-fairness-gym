@@ -1,3 +1,14 @@
 Max-util/
 __pycache__/
 venv/
+share/*
+*.csv
+lib/*
+include/*
+*.png
+*.zip
+**/.ipynb_checkpoints/
+**/__pycache__/*
+.DS_Store
+*.ipynb
+bin/*

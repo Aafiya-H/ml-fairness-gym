@@ -58,7 +58,6 @@ class CumulativeLoans(core.Metric):
     Args:
       env: The environment to be measured.
     """
-
     history = self._extract_history(env)
     result = []
     for index,history_item in enumerate(history):
@@ -146,7 +145,7 @@ class DefaulterRate(core.Metric):
     for history_item in history:
       state = history_item.state
       if history_item.action == 0:
-        continue
+        defaulted_loans[state.group_id] += 0
       if state.will_default:
         defaulted_loans[state.group_id] += 1
       total_loans[state.group_id] += 1
@@ -156,6 +155,6 @@ class DefaulterRate(core.Metric):
       elif total_loans[1]== 0:
         defaulter_rates.append(( defaulted_loans[0]/total_loans[0],0))
       else:
-        defaulter_rates.append((defaulted_loans[0]/total_loans[0],defaulted_loans[1]/total_loans[1]))
+        defaulter_rates.append(( defaulted_loans[0]/total_loans[0],defaulted_loans[1]/total_loans[1]))
     return defaulter_rates
 
