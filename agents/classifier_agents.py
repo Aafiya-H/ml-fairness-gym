@@ -184,6 +184,7 @@ class ScoringAgent(core.Agent):
 
   def _act_impl(self, observation, reward, done):
     self.global_threshold_history.append(self.global_threshold)
+    # print("Global Threshold History: ",self.global_threshold_history)
     for group, thresh in self.group_specific_thresholds.items():
       self.group_specific_threshold_history[group].append(thresh)
       self.target_recall_history[group].append(thresh.tpr_target)
@@ -201,6 +202,7 @@ class ScoringAgent(core.Agent):
       action = self.params.default_action_fn()
       # No reason to train during burnin. Train on the first non-burnin step.
     else:
+      print("In else block")
       self._train()
       if self.params.freeze_classifier_after_burnin:
         self.frozen = True
@@ -210,8 +212,12 @@ class ScoringAgent(core.Agent):
         # Convert np.array to a hashable form.
         group_id = tuple(group_id)
       features = self._get_features(observation)
+      # print("Features from observation: ",features)
       score = self._score_transform([features])[0]
+      # print("score : ",score)
       action = int(score >= self._get_threshold(group_id))
+      # print("Action: ",action)
+      # print("-"*40)
 
     self._last_observation = observation
     self._last_action = action
@@ -239,6 +245,7 @@ class ScoringAgent(core.Agent):
       return
 
     self._score_transform_update(training_corpus)
+    print("After calling _score_transform_update")
     self._set_thresholds(training_corpus)
 
   def _set_thresholds(self, training_corpus):
@@ -310,6 +317,8 @@ class ThresholdAgent(ScoringAgent):
           "Threshold agent can only have a single feature key. Got %s" %
           self.params.feature_keys)
     feature = observation.get(self.params.feature_keys[0])
+    # print("Feature:", feature)
+
     # feature = observation.get(self.params.feature_keys)  ##change here -->
 
     if self.params.convert_one_hot_to_integer:
@@ -331,6 +340,7 @@ class ClassifierAgent(ScoringAgent):
       factory=lambda: linear_model.LogisticRegression(solver="lbfgs"))
 
   def _score_transform_update(self, training_corpus):
+    print("In _score_transform_update  of ClassifierAgent")
     try:
       self._classifier.fit(training_corpus.get_features(),
                            training_corpus.get_labels())

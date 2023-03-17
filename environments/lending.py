@@ -75,10 +75,14 @@ class _ApplicantSampler(core.StateUpdater):
       state.total_loans_requested[state.group_id] += 1
       state.total_loans_accepted[state.group_id] += action
       state.acceptance_rates[state.group_id] = state.total_loans_accepted[state.group_id]/state.total_loans_requested[state.group_id]
-    # change here --> remove 2 lines below
-    print(state.group_id)
-    print("Total loans requested: ",state.total_loans_requested)
-    print("-"*20)
+
+      state.total_loans_defaulted[state.group_id] += state.will_default
+      if state.total_loans_accepted[state.group_id] != 0:
+        state.defaulter_rates[state.group_id] = state.total_loans_defaulted[state.group_id]/state.total_loans_accepted[state.group_id]
+
+      state.average_credit_score[state.group_id] = (state.average_credit_score[state.group_id] * state.timestep +
+      np.argmax(state.applicant_features)) / (state.timestep + 1)
+      state.timestep += 1
 
     del action  # Unused.
     params = state.params
@@ -114,8 +118,14 @@ class State(core.State):
   will_default = attr.ib(default=None)  # type: Optional[bool]
 
   acceptance_rates = attr.ib(default=[None,None])
+  defaulter_rates = attr.ib(default=[None,None])
+  average_credit_score = attr.ib(default=[0,0])
+  timestep = attr.ib(default=0)
   total_loans_requested = attr.ib(default=[0,0])
   total_loans_accepted = attr.ib(default=[0,0])
+  total_loans_defaulted = attr.ib(default=[0,0])
+
+
 
 
 class BaseLendingEnv(core.FairnessEnv):
@@ -158,7 +168,7 @@ class BaseLendingEnv(core.FairnessEnv):
     self.observable_state_vars = {
         'bank_cash': bank_cash_space,
         'applicant_features': loan_applicant_space,
-        'group': group_space
+        'group': group_space,
     }
 
     super(BaseLendingEnv, self).__init__(params)
