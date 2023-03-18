@@ -145,7 +145,9 @@ class DefaulterRate(core.Metric):
     for history_item in history:
       state = history_item.state
       if history_item.action == 0:
-        defaulted_loans[state.group_id] += 0
+        cur_defaulter_rates = defaulter_rates[-1]
+        defaulter_rates.append(cur_defaulter_rates)
+        continue
       if state.will_default:
         defaulted_loans[state.group_id] += 1
       total_loans[state.group_id] += 1
@@ -157,4 +159,3 @@ class DefaulterRate(core.Metric):
       else:
         defaulter_rates.append(( defaulted_loans[0]/total_loans[0],defaulted_loans[1]/total_loans[1]))
     return defaulter_rates
-

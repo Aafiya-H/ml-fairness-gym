@@ -75,10 +75,21 @@ class _ApplicantSampler(core.StateUpdater):
       state.total_loans_requested[state.group_id] += 1
       state.total_loans_accepted[state.group_id] += action
       state.acceptance_rates[state.group_id] = state.total_loans_accepted[state.group_id]/state.total_loans_requested[state.group_id]
-    # change here --> remove 2 lines below
-    # print(state.group_id)
-    # print("Total loans requested: ",state.total_loans_requested)
-    # print("-"*20)
+
+      state.total_loans_defaulted[state.group_id] += state.will_default
+      if state.total_loans_accepted[state.group_id] != 0:
+        state.defaulter_rates[state.group_id] = state.total_loans_defaulted[state.group_id]/state.total_loans_accepted[state.group_id]
+
+      state.average_credit_score[state.group_id] = (state.average_credit_score[state.group_id] * state.timestep +
+      np.argmax(state.applicant_features)) / (state.timestep + 1)
+      state.timestep += 1
+
+      ## To check 
+      # print(state.timestep)
+      # print(state.acceptance_rates)
+      # print(state.defaulter_rates)
+      # print(state.average_credit_score)
+      # print(np.argmax(state.applicant_features))
 
     del action  # Unused.
     params = state.params
@@ -89,7 +100,6 @@ class _ApplicantSampler(core.StateUpdater):
     state.group = new_applicant.group
     state.group_id = np.argmax(new_applicant.group)
     state.will_default = new_applicant.will_default
-
 
 
 @attr.s(cmp=False)  # Use core.State's equality methods.
@@ -114,8 +124,12 @@ class State(core.State):
   will_default = attr.ib(default=None)  # type: Optional[bool]
 
   acceptance_rates = attr.ib(default=[None,None])
+  defaulter_rates = attr.ib(default=[None,None])
+  average_credit_score = attr.ib(default=[0,0])
+  timestep = attr.ib(default=0)
   total_loans_requested = attr.ib(default=[0,0])
   total_loans_accepted = attr.ib(default=[0,0])
+  total_loans_defaulted = attr.ib(default=[0,0])
 
 
 class BaseLendingEnv(core.FairnessEnv):
